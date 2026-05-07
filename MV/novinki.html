@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>MangaVerse — Новинки</title>
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="novinki.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="left-side">
+            <a class="logo" href="index.html">MANGA<span>VERSE</span></a>
+            <div class="search-box">
+                <input id="searchInput" type="text" placeholder="Поиск манги...">
+            </div>
+        </div>
+        
+        <div class="center-nav">
+        </div>
+        
+        <div class="right-side">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="catalog.html" class="nav-link">Каталог</a>
+            <a href="novinki.html" class="nav-link">Новинки</a>
+            <div class="account-menu">
+                <button onclick="toggleMenu()" class="account-btn">Аккаунт ▼</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('register'); return false;">Регистрация</a>
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('login'); return false;">Вход</a>
+                    <div class="divider"></div>
+                    <a href="profile.html" class="dropdown-item">👤 Личный профиль</a>
+                    <a href="history.html" class="dropdown-item">📚 История чтения</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <section class="page-title">
+            <h1>🆕 Новинки манги</h1>
+            <p>Свежие релизы на MangaVerse</p>
+        </section>
+
+        <div class="novinki-list">
+            <div class="novinki-manga-card">
+                <div class="novinki-cover">
+                    <span class="novinki-badge">NEW</span>
+                    <img src="https://erascans.com/wp-content/uploads/2026/02/The-Beginning-After-the-End.jpg" alt="The Beginning After The End cover">
+                </div>
+                <div class="novinki-info">
+                    <div>
+                        <h4 class="novinki-title">The Beginning After The End</h4>
+                        <div class="novinki-tags">
+                            <span class="novinki-tag">Фэнтези</span>
+                            <span class="novinki-tag">Приключения</span>
+                            <span class="novinki-tag">Онгоинг</span>
+                        </div>
+                        <div class="novinki-rating">
+                            <span class="novinki-stars">⭐⭐⭐⭐</span>
+                            <span class="novinki-rating-value">4.2</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="novinki-description">Король Грей перерождается в новом мире с магией и монстрами. С воспоминаниями прошлой жизни, он стремится стать сильным и защитить свою новую семью.</p>
+                        <div class="novinki-meta">
+                            <span>📖 120 глав</span>
+                            <span>📅 2021-2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="novinki-manga-card">
+                <div class="novinki-cover">
+                    <span class="novinki-badge">NEW</span>
+                    <img src="https://readsnkmanga.com/wp-content/uploads/2025/07/Attack-on-Titan.jpg" alt="Attack on Titan cover">
+                </div>
+                <div class="novinki-info">
+                    <div>
+                        <h4 class="novinki-title">Attack on Titan</h4>
+                        <div class="novinki-tags">
+                            <span class="novinki-tag">Хоррор</span>
+                            <span class="novinki-tag">Драма</span>
+                            <span class="novinki-tag">Завершено</span>
+                        </div>
+                        <div class="novinki-rating">
+                            <span class="novinki-stars">⭐⭐⭐⭐</span>
+                            <span class="novinki-rating-value">4.9</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="novinki-description">Человечество живет в городах, окруженных огромными стенами, защищающими их от титанов. Эрен Йегер клянется уничтожить всех титанов после того, как они разрушили его город.</p>
+                        <div class="novinki-meta">
+                            <span>📖 139 глав</span>
+                            <span> 2010-2019</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="novinki-manga-card">
+                <div class="novinki-cover">
+                    <span class="novinki-badge">NEW</span>
+                    <img src="https://i.pinimg.com/736x/f8/2d/7b/f82d7bdf3a34b238bb850d59f3ebee0a.jpg" alt="Horimiya cover">
+                </div>
+                <div class="novinki-info">
+                    <div>
+                        <h4 class="novinki-title">Horimiya</h4>
+                        <div class="novinki-tags">
+                            <span class="novinki-tag">Романтика</span>
+                            <span class="novinki-tag">Школа</span>
+                            <span class="novinki-tag">Завершено</span>
+                        </div>
+                        <div class="novinki-rating">
+                            <span class="novinki-stars">⭐⭐⭐⭐</span>
+                            <span class="novinki-rating-value">4.7</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="novinki-description">Кёко Хори — популярная и красивая девушка в школе, но дома она ведет совсем другую жизнь. Идзуми Миямура — тихий отшельник с очками и татуировками.</p>
+                        <div class="novinki-meta">
+                            <span>📖 140 глав</span>
+                            <span>📅 2019-2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="novinki-manga-card">
+                <div class="novinki-cover">
+                    <span class="novinki-badge">NEW</span>
+                    <img src="https://th.bing.com/th/id/OIP.FDIGY5BaiJt5GymYknPo4AHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="One Punch Man cover">
+                </div>
+                <div class="novinki-info">
+                    <div>
+                        <h4 class="novinki-title">One Punch Man</h4>
+                        <div class="novinki-tags">
+                            <span class="novinki-tag">Экшен</span>
+                            <span class="novinki-tag">Комедия</span>
+                            <span class="novinki-tag">Онгоинг</span>
+                        </div>
+                        <div class="novinki-rating">
+                            <span class="novinki-stars">⭐⭐⭐⭐</span>
+                            <span class="novinki-rating-value">4.8</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="novinki-description">Сайтама — герой, который может победить любого противника одним ударом. Но от этой силы он впал в депрессию, так как не находит достойных соперников.</p>
+                        <div class="novinki-meta">
+                            <span>📖 200 глав</span>
+                            <span>📅 2010-2019</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="novinki-manga-card">
+                <div class="novinki-cover">
+                    <span class="novinki-badge">NEW</span>
+                    <img src="https://th.bing.com/th/id/OIP.02gfHepkMJgAZQEsiJu7aAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="Demon Slayer cover">
+                </div>
+                <div class="novinki-info">
+                    <div>
+                        <h4 class="novinki-title">Demon Slayer</h4>
+                        <div class="novinki-tags">
+                            <span class="novinki-tag">Экшен</span>
+                            <span class="novinki-tag">Фэнтези</span>
+                            <span class="novinki-tag">Завершено</span>
+                        </div>
+                        <div class="novinki-rating">
+                            <span class="novinki-stars">⭐⭐⭐⭐</span>
+                            <span class="novinki-rating-value">4.8</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="novinki-description">Танджиро Камадо — добрый мальчик. Когда демон убивает его семью, а его сестру превращает в демона, он клянется стать истребителем демонов.</p>
+                        <div class="novinki-meta">
+                            <span>📖 205 глав</span>
+                            <span> 2018-2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="novinki-manga-card">
+                <div class="novinki-cover">
+                    <span class="novinki-badge">NEW</span>
+                    <img src="https://tse1.mm.bing.net/th/id/OIP.qL-K8tWwrIB8gZ8M2rjzyQAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Your Lie in April cover">
+                </div>
+                <div class="novinki-info">
+                    <div>
+                        <h4 class="novinki-title">Your Lie in April</h4>
+                        <div class="novinki-tags">
+                            <span class="novinki-tag">Романтика</span>
+                            <span class="novinki-tag">Драма</span>
+                            <span class="novinki-tag">Завершено</span>
+                        </div>
+                        <div class="novinki-rating">
+                            <span class="novinki-stars">⭐⭐⭐⭐</span>
+                            <span class="novinki-rating-value">4.4</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="novinki-description">Косэй Арима — пианист-вундеркинд, который потерял способность слышать музыку после смерти матери. Встреча со скрипачкой Каори Миязоно меняет его жизнь.</p>
+                        <div class="novinki-meta">
+                            <span>📖 44 главы</span>
+                            <span>📅 2019-2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p> 2026 MangaVerse — Новинки</p>
+    </footer>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" type="button" onclick="closeAuthModal()">&times;</button>
+            <h2 id="authTitle">Регистрация</h2>
+            <form id="authForm" onsubmit="submitAuth(event)">
+                <label for="authName">Имя</label>
+                <input id="authName" type="text" placeholder="Введите имя" required>
+                <label for="authEmail">Email</label>
+                <input id="authEmail" type="email" placeholder="Введите email" required>
+                <label for="authPassword">Пароль</label>
+                <input id="authPassword" type="password" placeholder="Введите пароль" required>
+                <label for="authConfirmPassword">Подтвердите пароль</label>
+                <input id="authConfirmPassword" type="password" placeholder="Повторите пароль">
+                <button id="authSubmit" class="submit-btn" type="submit">Зарегистрироваться</button>
+            </form>
+            <div class="auth-toggle">
+                <span id="authToggleText">Уже есть аккаунт?</span>
+                <a href="#" id="authToggleLink" onclick="switchAuthMode(); return false;">Войти</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

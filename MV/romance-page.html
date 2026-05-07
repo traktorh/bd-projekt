@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>MangaVerse — Романтика</title>
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header class="collection-header">
+        <a href="index.html" class="back-button">
+            <span class="back-arrow">←</span>
+            <span class="back-text">На главную</span>
+        </a>
+        <h1 class="collection-title">Романтика</h1>
+        <p class="collection-description">Манги в жанре романтика — истории о любви и чувствах</p>
+    </header>
+
+    <main class="content">
+        <section class="popular-manga-section">
+            <div class="section-header-left">
+                <h2 class="section-title-small">Популярное в жанре Романтика</h2>
+            </div>
+            <div class="popular-manga-grid horizontal-scroll">
+                <div class="manga-card-simple" onclick="openMangaDetail('Horimiya')">
+                    <div class="manga-cover-simple">
+                        <img src="https://i.pinimg.com/736x/f8/2d/7b/f82d7bdf3a34b238bb850d59f3ebee0a.jpg" alt="Horimiya cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Horimiya</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Романтика</span>
+                            <span class="manga-tag">Школа</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="manga-card-simple" onclick="openMangaDetail('Your Lie in April')">
+                    <div class="manga-cover-simple">
+                        <img src="https://tse1.mm.bing.net/th/id/OIP.qL-K8tWwrIB8gZ8M2rjzyQAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Your Lie in April cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Your Lie in April</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Романтика</span>
+                            <span class="manga-tag">Драма</span>
+                        </div>
+                    </div>
+                </div>
+                 <div class="manga-card-simple" onclick="openMangaDetail('Ангел по соседству')" data-tags="романтика,онгоинг,школа" data-genres="Романтика,Комедия" data-date="2020-2023" data-rating="4.9" data-chapters="74">
+                    <div class="manga-cover-simple">
+                        <img src="https://remanga.org/media/titles/the-angel-next-door-spoils-me-rotten/cover_86f89808d16442ce.webp" alt="Ангел по соседству cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Ангел по соседству</h4>
+                        <span class="manga-tag">Романтика</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 MangaVerse — Минимализм и скорость</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

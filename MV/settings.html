@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>MangaVerse — Настройки</title>
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="left-side">
+            <a class="logo" href="index.html">MANGA<span>VERSE</span></a>
+            <div class="search-box">
+                <input id="searchInput" type="text" placeholder="Поиск манги...">
+            </div>
+        </div>
+        
+        <div class="center-nav">
+        </div>
+        
+        <div class="right-side">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="catalog.html" class="nav-link">Каталог</a>
+            <a href="novinki.html" class="nav-link">Новинки</a>
+            <div class="account-menu">
+                <button onclick="toggleMenu()" class="account-btn">Аккаунт ▼</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('register'); return false;">Регистрация</a>
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('login'); return false;">Вход</a>
+                    <div class="divider"></div>
+                    <a href="profile.html" class="dropdown-item">👤 Личный профиль</a>
+                    <a href="history.html" class="dropdown-item">📚 История чтения</a>
+                    <a href="settings.html" class="dropdown-item">⚙️ Настройки</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="settings-container">
+            <div class="page-title">
+                <h1>⚙️ Настройки</h1>
+                <p>Персонализация сайта и управление функциями</p>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Внешний вид -->
+                <div class="settings-section">
+                    <h2>🎨 Внешний вид</h2>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Тема оформления</h3>
+                            <p>Выберите предпочитаемую тему сайта</p>
+                        </div>
+                        <div class="setting-control">
+                            <div class="theme-selector">
+                                <button class="theme-option" onclick="setTheme('dark')" id="darkTheme">
+                                    <span class="theme-icon">🌙</span>
+                                    <span>Темная</span>
+                                </button>
+                                <button class="theme-option" onclick="setTheme('light')" id="lightTheme">
+                                    <span class="theme-icon">☀️</span>
+                                    <span>Светлая</span>
+                                </button>
+                                <button class="theme-option" onclick="setTheme('auto')" id="autoTheme">
+                                    <span class="theme-icon">🔄</span>
+                                    <span>Авто</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Размер шрифта</h3>
+                            <p>Настройте комфортный размер текста</p>
+                        </div>
+                        <div class="setting-control">
+                            <div class="font-size-control">
+                                <button onclick="adjustFontSize(-1)" class="size-btn">A-</button>
+                                <span class="size-value" id="fontSizeValue">100%</span>
+                                <button onclick="adjustFontSize(1)" class="size-btn">A+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Анимации</h3>
+                            <p>Включить или отключить анимации интерфейса</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="animationsToggle" checked onchange="toggleAnimations()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Уведомления -->
+                <div class="settings-section">
+                    <h2>🔔 Уведомления</h2>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Новые главы</h3>
+                            <p>Уведомлять о выходе новых глав</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="newChaptersToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Рекомендации</h3>
+                            <p>Получать персональные рекомендации</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="recommendationsToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Звуковые уведомления</h3>
+                            <p>Воспроизводить звук при уведомлениях</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="soundToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Конфиденциальность -->
+                <div class="settings-section">
+                    <h2>🔒 Конфиденциальность</h2>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>История чтения</h3>
+                            <p>Сохранять историю прочитанного</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="historyToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Аналитика</h3>
+                            <p>Помогать улучшать сайт с помощью аналитики</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="analyticsToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Профиль публичный</h3>
+                            <p>Другие пользователи могут видеть ваш профиль</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="publicProfileToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Производительность -->
+                <div class="settings-section">
+                    <h2>⚡ Производительность</h2>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Автозагрузка</h3>
+                            <p>Автоматически загружать следующую главу</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="autoloadToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Качество изображений</h3>
+                            <p>Выберите качество загрузки изображений</p>
+                        </div>
+                        <div class="setting-control">
+                            <select id="imageQuality" class="quality-select">
+                                <option value="high">Высокое</option>
+                                <option value="medium" selected>Среднее</option>
+                                <option value="low">Низкое</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Предзагрузка</h3>
+                            <p>Загружать следующие главы заранее</p>
+                        </div>
+                        <div class="setting-control">
+                            <label class="switch">
+                                <input type="checkbox" id="preloadToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Язык и регион -->
+                <div class="settings-section">
+                    <h2>🌍 Язык и регион</h2>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Язык интерфейса</h3>
+                            <p>Выберите язык сайта</p>
+                        </div>
+                        <div class="setting-control">
+                            <select id="languageSelect" class="language-select">
+                                <option value="ru" selected>Русский</option>
+                                <option value="en">English</option>
+                                <option value="jp">日本語</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Часовой пояс</h3>
+                            <p>Настройте часовой пояс для уведомлений</p>
+                        </div>
+                        <div class="setting-control">
+                            <select id="timezoneSelect" class="timezone-select">
+                                <option value="auto">Автоопределение</option>
+                                <option value="UTC+3">Москва (UTC+3)</option>
+                                <option value="UTC+0">Лондон (UTC+0)</option>
+                                <option value="UTC-5">Нью-Йорк (UTC-5)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Управление аккаунтом -->
+                <div class="settings-section">
+                    <h2>👤 Управление аккаунтом</h2>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Экспорт данных</h3>
+                            <p>Скачать все ваши данные</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="action-btn export" onclick="exportData()">Экспортировать</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Очистка кэша</h3>
+                            <p>Удалить временные файлы</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="action-btn clear" onclick="clearCache()">Очистить</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-item danger">
+                        <div class="setting-info">
+                            <h3>Удаление аккаунта</h3>
+                            <p>Безвозвратно удалить аккаунт и все данные</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="action-btn danger" onclick="deleteAccount()">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-actions">
+                <button class="save-btn" onclick="saveSettings()">💾 Сохранить настройки</button>
+                <button class="reset-btn" onclick="resetSettings()">🔄 Сбросить все</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 MangaVerse — Настройки</p>
+    </footer>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" type="button" onclick="closeAuthModal()">&times;</button>
+            <h2 id="authTitle">Регистрация</h2>
+            <form id="authForm" onsubmit="submitAuth(event)">
+                <label for="authName">Имя</label>
+                <input id="authName" type="text" placeholder="Введите ваше имя">
+                <label for="authEmail">Email</label>
+                <input id="authEmail" type="email" placeholder="your@email.com" required>
+                <label id="passwordLabel" for="authPassword">Пароль</label>
+                <input id="authPassword" type="password" placeholder="Минимум 6 символов" required>
+                <label id="confirmPasswordLabel" for="authConfirmPassword">Подтвердите пароль</label>
+                <input id="authConfirmPassword" type="password" placeholder="Повторите пароль" required>
+                <button id="authSubmit" class="submit-btn" type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Функции для настроек
+        function setTheme(theme) {
+            document.querySelectorAll('.theme-option').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(theme + 'Theme').classList.add('active');
+            
+            if (theme === 'dark') {
+                document.body.classList.remove('light-theme');
+                localStorage.setItem('theme', 'dark');
+            } else if (theme === 'light') {
+                document.body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
+            } else if (theme === 'auto') {
+                const hour = new Date().getHours();
+                if (hour >= 6 && hour < 20) {
+                    document.body.classList.add('light-theme');
+                } else {
+                    document.body.classList.remove('light-theme');
+                }
+                localStorage.setItem('theme', 'auto');
+            }
+            updateThemeIcon();
+        }
+
+        function adjustFontSize(delta) {
+            const currentSize = parseInt(localStorage.getItem('fontSize') || '100');
+            const newSize = Math.max(80, Math.min(120, currentSize + delta * 10));
+            document.documentElement.style.fontSize = newSize + '%';
+            document.getElementById('fontSizeValue').textContent = newSize + '%';
+            localStorage.setItem('fontSize', newSize);
+        }
+
+        function toggleAnimations() {
+            const enabled = document.getElementById('animationsToggle').checked;
+            if (enabled) {
+                document.body.style.removeProperty('--transition-duration');
+            } else {
+                document.body.style.setProperty('--transition-duration', '0s');
+            }
+            localStorage.setItem('animations', enabled);
+        }
+
+        function exportData() {
+            const data = {
+                user: getCurrentUser(),
+                history: JSON.parse(localStorage.getItem('readingHistory') || '[]'),
+                favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
+                settings: localStorage.getItem('settings') || '{}'
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mangadata_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearCache() {
+            if (confirm('Вы уверены, что хотите очистить кэш?')) {
+                localStorage.removeItem('readingHistory');
+                localStorage.removeItem('favorites');
+                alert('Кэш очищен!');
+            }
+        }
+
+        function deleteAccount() {
+            if (confirm('Вы уверены, что хотите удалить аккаунт? Это действие необратимо!')) {
+                // Очистка всех данных
+                localStorage.clear();
+                alert('Аккаунт удален!');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function saveSettings() {
+            const settings = {
+                animations: document.getElementById('animationsToggle').checked,
+                newChapters: document.getElementById('newChaptersToggle').checked,
+                recommendations: document.getElementById('recommendationsToggle').checked,
+                sound: document.getElementById('soundToggle').checked,
+                history: document.getElementById('historyToggle').checked,
+                analytics: document.getElementById('analyticsToggle').checked,
+                publicProfile: document.getElementById('publicProfileToggle').checked,
+                autoload: document.getElementById('autoloadToggle').checked,
+                imageQuality: document.getElementById('imageQuality').value,
+                preload: document.getElementById('preloadToggle').checked,
+                language: document.getElementById('languageSelect').value,
+                timezone: document.getElementById('timezoneSelect').value
+            };
+            
+            localStorage.setItem('settings', JSON.stringify(settings));
+            alert('Настройки сохранены!');
+        }
+
+        function resetSettings() {
+            if (confirm('Вы уверены, что хотите сбросить все настройки?')) {
+                localStorage.removeItem('settings');
+                localStorage.removeItem('fontSize');
+                localStorage.removeItem('theme');
+                location.reload();
+            }
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('settings') || '{}');
+            
+            // Применение настроек
+            document.getElementById('animationsToggle').checked = settings.animations !== false;
+            document.getElementById('newChaptersToggle').checked = settings.newChapters !== false;
+            document.getElementById('recommendationsToggle').checked = settings.recommendations !== false;
+            document.getElementById('soundToggle').checked = settings.sound === true;
+            document.getElementById('historyToggle').checked = settings.history !== false;
+            document.getElementById('analyticsToggle').checked = settings.analytics === true;
+            document.getElementById('publicProfileToggle').checked = settings.publicProfile === true;
+            document.getElementById('autoloadToggle').checked = settings.autoload !== false;
+            document.getElementById('imageQuality').value = settings.imageQuality || 'medium';
+            document.getElementById('preloadToggle').checked = settings.preload !== false;
+            document.getElementById('languageSelect').value = settings.language || 'ru';
+            document.getElementById('timezoneSelect').value = settings.timezone || 'auto';
+            
+            // Размер шрифта
+            const fontSize = localStorage.getItem('fontSize') || '100';
+            document.documentElement.style.fontSize = fontSize + '%';
+            document.getElementById('fontSizeValue').textContent = fontSize + '%';
+            
+            // Тема
+            const theme = localStorage.getItem('theme') || 'dark';
+            setTheme(theme);
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+        });
+    </script>
+</body>
+</html>
