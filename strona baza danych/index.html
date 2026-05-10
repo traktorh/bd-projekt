@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>MangaVerse — Strona główna</title>
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="manga-card-menu.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="left-side">
+            <a class="logo" href="index.html">MANGA<span>VERSE</span></a>
+            <div class="search-box">
+                <input id="searchInput" type="text" placeholder="Szukaj mangi...">
+            </div>
+        </div>
+        
+        <div class="center-nav">
+        </div>
+        
+        <div class="right-side">
+            <a href="index.html" class="nav-link">Strona główna</a>
+            <a href="catalog.html" class="nav-link">Katalog</a>
+            <a href="novinki.html" class="nav-link">Nowości</a>
+            <div class="account-menu">
+                <button onclick="toggleMenu()" class="account-btn">Konto ▼</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('register'); return false;">Rejestracja</a>
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('login'); return false;">Logowanie</a>
+                    <div class="divider"></div>
+                    <a href="profile.html" class="dropdown-item">👤 Profil osobisty</a>
+                    <a href="history.html" class="dropdown-item">📚 Historia czytania</a>
+                 
+                </div>
+            </div>
+        </div>
+        
+    </header>
+
+    <main class="content">
+       
+
+        <!-- Hero секция -->
+        <section class="hero-simple">
+            <div class="hero-simple-content">
+                <h1 class="subtle-title">Odkryj świat mangi</h1>
+                <p>Tysiące historii czeka na Ciebie w jednym miejscu</p>
+                <div class="hero-actions">
+                    <a href="catalog.html" class="hero-btn">Zacznij czytać</a>
+                    <a href="novinki.html" class="hero-btn-secondary">Nowości</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Новинки -->
+        <section class="popular-manga-section">
+            <div class="section-header-left">
+                <h1 class="section-title-small">Nowości</h1>
+                <a class="view-all" href="novinki.html">Zobacz wszystkie</a>
+            </div>
+            
+            <div class="popular-manga-grid horizontal-scroll" id="novinki">
+                <div class="manga-card-simple" onclick="openMangaDetail('chainsaw-man', 'Chainsaw Man', 'manga-detail-modern.html')" data-tags="экшен,онгоинг" data-genres="Экшен" data-date="2020-2023" data-rating="4.8" data-chapters="110">
+                    <div class="manga-cover-simple">
+                        <img src="https://cdn.tsnocheck.ru/static/99fca753-b234-482c-89c4-3d878cadeb2e.avif" alt="Chainsaw Man cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Chainsaw Man</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Akcja</span>
+                            <span class="manga-tag">W trakcie</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('spy-x-family', 'Spy x Family')">
+                    <div class="manga-cover-simple">
+                        <img src="https://www.mangaread.org/wp-content/uploads/2020/05/77.jpg" alt="Spy x Family cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Spy x Family</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Komedia</span>
+                            <span class="manga-tag">Szpiegowski</span>
+                            <span class="manga-tag">Szkoła</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('blue-lock', 'Blue Lock')">
+                    <div class="manga-cover-simple">
+                        <img src="https://th.bing.com/th/id/OIP.nVDsfjUO05vrbVj9XCQnugHaKl?w=203&h=289&c=7&r=0&o=5&pid=1.7" alt="Blue Lock cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Blue Lock</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Sport</span>
+                            <span class="manga-tag">Akcja</span>
+                            <span class="manga-tag">Shōnen</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('solo-leveling', 'Solo Leveling')">
+                    <div class="manga-cover-simple">
+                        <img src="https://sololevelings.com/volume-covers3/sololeveling.webp" alt="Solo Leveling cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Solo Leveling</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Akcja</span>
+                            <span class="manga-tag">Fantastyka</span>
+                            <span class="manga-tag">W trakcie</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('vinland-saga', 'Vinland Saga')">
+                    <div class="manga-cover-simple">
+                        <img src="https://tse3.mm.bing.net/th/id/OIP.lLbWCy-n4XOgSe0_rcsyZQHaKa?r=0&w=711&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Vinland Saga cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Vinland Saga</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Przygoda</span>
+                            <span class="manga-tag">Historia</span>
+                            <span class="manga-tag">Dramat</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('jujutsu-kaisen', 'Jujutsu Kaisen')">
+                    <div class="manga-cover-simple">
+                        <img src="https://th.bing.com/th/id/OIP.LuoA0CROQQ13Yn8UYw80hQAAAA?w=202&h=288&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="Jujutsu Kaisen cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Jujutsu Kaisen</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Akcja</span>
+                            <span class="manga-tag">Fantastyka</span>
+                            <span class="manga-tag">Shōnen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+         <h2 class="section-title-small">Podbor</h2>
+  <div class="cards-container">
+  
+  <a href="horror-page.html" class="card-link">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="title">Horror</h3>
+        <div class="stats">
+          <span>👁 968.1K</span>
+          <span>❤️ 12594</span>
+        </div>
+      </div>
+      <div class="image-stack">
+        <div class="img-box" style="background-image: url('https://mangabuff.ru/img/manga/posters/spiral.jpg');"></div>
+        <div class="img-box" style="background-image: url('https://mangabuff.ru/x180/img/manga/posters/poveshennaya-kukla.jpg?1699612272');"></div>
+        <div class="img-box" style="background-image: url('https://mangabuff.ru/x180/img/manga/posters/igra-druzei.jpg');"></div>
+      </div>
+    </div>
+  </a>
+  
+  <a href="romance-page.html" class="card-link">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="title">Romantyka</h3>
+        <div class="stats">
+          <span>👁 249.1K</span>
+          <span>❤️ 5624</span>
+        </div>
+      </div>
+      <div class="image-stack">
+        <div class="img-box" style="background-image: url('https://mangabuff.ru/img/manga/posters/monolog-v-aptechnoi-lavke.jpg?1755869429');"></div>
+        <div class="img-box" style="background-image: url('https://mangabuff.ru/img/cards/xVXkloQcIIHD3ndgUa4m8pjxjj7TEY.png');"></div>
+        <div class="img-box" style="background-image: url('https://mangatoon.co/wp-content/uploads/2025/11/27c36050c04d04b625531216d992b529-350x476.jpg');"></div>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+
+
+
+        <!-- Popularna manga -->
+        <section class="popular-manga-section">
+            <div class="section-header-left">
+                <h2 class="section-title-small">Popularne</h2>
+                <a class="view-all" href="catalog.html">Zobacz wszystkie</a>
+            </div>
+            <div class="popular-manga-grid horizontal-scroll" id="popular">
+                <div class="manga-card-simple" onclick="openMangaDetail('Attack on Titan')">
+                    <div class="manga-cover-simple">
+                        <img src="https://readsnkmanga.com/wp-content/uploads/2025/07/Attack-on-Titan.jpg" alt="Attack on Titan cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Attack on Titan</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Horror</span>
+                            <span class="manga-tag">Zakończone</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('Demon Slayer')">
+                    <div class="manga-cover-simple">
+                        <img src="https://th.bing.com/th/id/OIP.02gfHepkMJgAZQEsiJu7aAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="Demon Slayer cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Demon Slayer</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Akcja</span>
+                            <span class="manga-tag">Fantastyka</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('The Beginning After The End')">
+                    <div class="manga-cover-simple">
+                        <img src="https://erascans.com/wp-content/uploads/2026/02/The-Beginning-After-the-End.jpg" alt="The Beginning After The End cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>The Beginning After The End</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Fantastyka</span>
+                            <span class="manga-tag">Przygoda</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('Horimiya')">
+                    <div class="manga-cover-simple">
+                        <img src="https://i.pinimg.com/736x/f8/2d/7b/f82d7bdf3a34b238bb850d59f3ebee0a.jpg" alt="Horimiya cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Horimiya</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Romantyka</span>
+                            <span class="manga-tag">Szkoła</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('Your Lie in April')">
+                    <div class="manga-cover-simple">
+                        <img src="https://tse1.mm.bing.net/th/id/OIP.qL-K8tWwrIB8gZ8M2rjzyQAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Your Lie in April cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>Your Lie in April</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Romantyka</span>
+                            <span class="manga-tag">Dramat</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manga-card-simple" onclick="openMangaDetail('One Punch Man')">
+                    <div class="manga-cover-simple">
+                        <img src="https://th.bing.com/th/id/OIP.FDIGY5BaiJt5GymYknPo4AHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="One Punch Man cover" class="manga-cover-image">
+                    </div>
+                    <div class="manga-info-simple">
+                        <h4>One Punch Man</h4>
+                        <div class="manga-tags">
+                            <span class="manga-tag">Akcja</span>
+                            <span class="manga-tag">Komedia</span>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- Podbor -->
+        <!-- Подборки -->
+        <section class="popular-manga-section">
+            <div class="section-header-left">
+            
+
+    </main>
+
+    <footer>
+        <p> 2026 MangaVerse — Minimalizm i szybkość</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
