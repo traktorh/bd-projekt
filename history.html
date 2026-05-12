@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>MangaVerse — Katalog</title>
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="catalog.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="left-side">
+            <a class="logo" href="index.html">MANGA<span>VERSE</span></a>
+            <div class="search-box">
+                <input id="searchInput" type="text" placeholder="Szukaj mangi..." oninput="filterManga()">
+            </div>
+        </div>
+        
+        <div class="right-side">
+            <a href="index.html" class="nav-link">Strona główna</a>
+            <a href="catalog.html" class="nav-link">Katalog</a>
+            <a href="novinki.html" class="nav-link">Nowości</a>
+            <div class="account-menu">
+                <button onclick="toggleMenu()" class="account-btn">Konto ▼</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('register'); return false;">Rejestracja</a>
+                    <a href="javascript:void(0)" class="dropdown-item" onclick="openAuthModal('login'); return false;">Logowanie</a>
+                    <div class="divider"></div>
+                    <a href="profile.html" class="dropdown-item">👤 Profil osobisty</a>
+                    <a href="history.html" class="dropdown-item">📚 Historia czytania</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="content catalog-layout">
+        <aside class="sidebar">
+            <div class="filter-header">
+                <h3>Filtry</h3>
+                <button class="clear-btn" onclick="clearFilters()">Wyczyść</button>
+            </div>
+
+            <div class="filter-group">
+                <label>Gatunek</label>
+                <select id="genreFilter" class="filter-select" onchange="filterManga()">
+                    <option value="all">Wszystkie</option>
+                    <option value="Akcja">Akcja</option>
+                    <option value="Romans">Romans</option>
+                    <option value="Fantastyka">Fantastyka</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Komedia">Komedia</option>
+                    <option value="Dramat">Dramat</option>
+                    <option value="Szkolne">Szkolne</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Status</label>
+                <select id="statusFilter" class="filter-select" onchange="filterManga()">
+                    <option value="all">Wszystkie</option>
+                    <option value="Wydawane">Wydawane</option>
+                    <option value="Zakończone">Zakończone</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Rok</label>
+                <select id="yearFilter" class="filter-select" onchange="filterManga()">
+                    <option value="all">Wszystkie lata</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2011">2011</option>
+                    <option value="2009">2009</option>
+                    <option value="2005">2005</option>
+                    <option value="1991">1991</option>
+                </select>
+            </div>
+
+            <button class="apply-filters-btn" onclick="filterManga()">Zastosuj</button>
+        </aside>
+        
+
+        <section class="main-section">
+            <div class="page-title">
+                <h1>Katalog mangi</h1>
+                <p>Znajdź swoją ulubioną mangę według gatunku, daty lub tagów.</p>
+            </div>
+
+           
+
+            <!-- Wyniki i licznik -->
+            <div class="results-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span id="resultsCount" style="color: #888; font-size: 14px;">Wszystkie</span>
+            </div>
+
+            <!-- Dynamiczna siatka mangi -->
+            <div class="cards-grid grid-5" id="mangaGrid">
+                <!-- Manga będą wyświetlane tutaj -->
+            </div>
+
+            <!-- Info o braku wyników -->
+            <div id="noResults" class="no-results" style="display: none; text-align: center; padding: 50px; grid-column: 1/-1;">
+                <h3>Nie znaleziono mangi</h3>
+                <p>Spróbuj zmienić filtry wyszukiwania</p>
+                <button onclick="resetFilters()" class="retry-btn" style="margin-top: 15px; padding: 10px 20px; background: #4a9eff; color: white; border: none; border-radius: 4px; cursor: pointer;">Wyczyść filtry</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>2026 MangaVerse — Katalog</p>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" type="button" onclick="closeAuthModal()">&times;</button>
+            <h2 id="authTitle">Rejestracja</h2>
+            <form id="authForm" onsubmit="submitAuth(event)">
+                <label for="authName">Imię</label>
+                <input id="authName" type="text" placeholder="Wprowadź swoje imię">
+                
+                <label for="authEmail">Email</label>
+                <input id="authEmail" type="email" placeholder="twoj@email.com" required>
+                
+                <label id="passwordLabel" for="authPassword">Hasło</label>
+                <input id="authPassword" type="password" placeholder="Minimum 6 znaków" required>
+                
+                <label id="confirmPasswordLabel" for="authConfirmPassword" style="display:none;">Potwierdź hasło</label>
+                <input id="authConfirmPassword" type="password" placeholder="Powtórz hasło" style="display:none;">
+                
+                <button id="authSubmit" class="submit-btn" type="submit">Zarejestruj się</button>
+            </form>
+            
+            <div class="auth-toggle">
+                <span id="authToggleText">Masz już konto?</span>
+                <a href="#" id="authToggleLink" onclick="switchAuthMode(); return false;">Zaloguj się</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="js/catalog-api-client.js"></script>
+</body>
+</html>
