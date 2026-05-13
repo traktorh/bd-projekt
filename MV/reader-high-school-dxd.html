@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Czytnik mangi - MANGAVERSE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reader.css">
+</head>
+<body>
+    <header class="reader-header">
+        <div class="reader-nav">
+            <div class="reader-nav-left">
+                 <a class="logo" href="index.html">MANGA<span>VERSE</span></a>
+                <span class="manga-title-reader">high-school-dxd</span>
+            </div>
+            <div class="reader-nav-center">
+                <button class="chapter-nav-btn" onclick="previousChapter()">←</button>
+                <span class="chapter-info" onclick="toggleChapterList()">tom 1 rozdział 1</span>
+                <button class="chapter-nav-btn" onclick="nextChapter()">→</button>
+                <div id="chapterListDropdown" class="chapter-list-dropdown">
+                    <!-- Chapter list will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="reader-main" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 80px);">
+        <!-- Kontener dla dynamicznej ładowania obrazów rozdziałów -->
+        <div id="staticImagesContainer" style="margin: 0 auto; max-width: 800px; background: #0a0a0a; position: relative;">
+            <!-- Obrazy będą ładowane dynamicznie -->
+        </div>
+        
+        <!-- Page navigation controls -->
+        <div id="pageControls" style="display: none; text-align: center; padding: 20px; color: #fff; margin-top: 20px;">
+            <button onclick="previousPage()" style="padding: 10px 20px; margin: 0 10px; background: #4a9eff; color: white; border: none; border-radius: 4px; cursor: pointer;">← Previous Page</button>
+            <span id="pageInfo" style="margin: 0 20px;">Page 1 / 1</span>
+            <button onclick="nextPage()" style="padding: 10px 20px; margin: 0 10px; background: #4a9eff; color: white; border: none; border-radius: 4px; cursor: pointer;">Next Page →</button>
+        </div>
+    </main>
+
+    <script>
+     // Настройки только для High School DxD
+let currentChapter = 1;
+let totalChapters = 29; // Всего глав
+let mangaId = 2;
+
+// Ссылки на изображения. Добавляйте свои ссылки в массивы глав:
+const chapterImages = {
+    1: Array.from({length: 46}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-1-chapter-1/${i + 1}.jpg`),
+    2: Array.from({length: 40}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-1-chapter-2/${i + 1}.jpg`),
+     3: Array.from({length: 38}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-1-chapter-3/${i + 1}.jpg`),
+    4: Array.from({length: 41}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-1-chapter-4/${i + 1}.jpg`),
+    5: Array.from({length: 33}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-2-chapter-5/${i + 1}.jpg`),
+    6: Array.from({length: 27}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-2-chapter-6/${i + 1}.jpg`),
+     7: Array.from({length: 27}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-2-chapter-7/${i + 1}.jpg`),
+    8: Array.from({length: 27}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-2-chapter-8/${i + 1}.jpg`),
+    9: Array.from({length: 26}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-2-chapter-9/${i + 1}.jpg`),
+    10: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-2-chapter-10/${i + 1}.jpg`),
+     11: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-3-chapter-11/${i + 1}.jpg`),
+    12: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-3-chapter-12-i-ll-do-my-best-at-work/${i + 1}.jpg`),
+    13: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-3-chapter-13/${i + 1}.jpg`),
+    14: Array.from({length: 30}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-3-chapter-14/${i + 1}.jpg`),
+     15: Array.from({length: 28}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-3-chapter-15/${i + 1}.jpg`),
+    16: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-3-chapter-16-training-starts/${i + 1}.jpg`),
+    16.5: Array.from({length: 5}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-3-chapter-16-5-at-your-side-serve/${i + 1}.jpg`),
+    17: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-4-chapter-17-devil-with-style/${i + 1}.jpg`),
+     18: Array.from({length: 27}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-4-chapter-18-enchanting-special-move/${i + 1}.jpg`),
+    19: Array.from({length: 26}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-4-chapter-19/${i + 1}.jpg`),
+    20: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-4-chapter-20-i-can-still-fight/${i + 1}.jpg`),
+    21: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-4-chapter-21-i-ll-take-prez-back/${i + 1}.jpg`),
+     22: Array.from({length: 24}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-4-chapter-22-i-ll-blow-away-the-immortal-bird/${i + 1}.jpg`),
+    22.5: Array.from({length: 5}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-4-chapter-22-5-new-life-starts/${i + 1}.jpg`),
+    23: Array.from({length: 5}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-5-chapter-23-let-s-turn-the-heat-up-occult-research-club/${i + 1}.jpg`),
+    24: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-5-chapter-24-well-beat-you-with-our-teamwork/${i + 1}.jpg`),
+    25: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-5-chapter-25/${i + 1}.jpg`),
+    26: Array.from({length: 25}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-5-chapter-26/${i + 1}.jpg`),
+    27: Array.from({length: 21}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-5-chapter-27/${i + 1}.jpg`),
+    28: Array.from({length: 29}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-5-chapter-28-plan-to-destroy-the-holy-sword/${i + 1}.jpg`),
+    28.5: Array.from({length: 9}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-5-chapter-28-5-your-fate-revisited/${i + 1}.jpg`),
+    29: Array.from({length: 21}, (_, i) => `https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-6-chapter-29-a-devil-s-punishment-please-forgive-me/${i + 1}.jpg`),
+    // И так далее для каждой главы...
+};
+
+// Если хотите оставить автогенератор заглушек для остальных глав:
+for (let i = 9; i <= totalChapters; i++) {
+    if (!chapterImages[i]) {
+        chapterImages[i] = [];
+        const pagesCount = 46; // Количество страниц по умолчанию
+        for (let p = 1; p <= pagesCount; p++) {
+            chapterImages[i].push(`https://s9.mbbcdn.cfd/res/manga/high-school-dxd/vol-1-chapter-${i}/${p}.jpg`);
+        }
+    }
+}
+        let isLoading = false;
+        let lastClickTime = 0;
+        const CLICK_DELAY = 100;
+        
+        // Page navigation variables
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentChapterImages = [];
+
+        // История чтения
+        function getReadingHistory() {
+            const history = localStorage.getItem('mangaReadingHistory');
+            return history ? JSON.parse(history) : {};
+        }
+
+        function saveChapterAsRead(chapterNum) {
+            const history = getReadingHistory();
+            const mangaKey = `manga_${mangaId}`;
+
+            if (!history[mangaKey]) {
+                history[mangaKey] = [];
+            }
+
+            if (!history[mangaKey].includes(chapterNum)) {
+                history[mangaKey].push(chapterNum);
+                history[mangaKey].sort((a, b) => a - b);
+                localStorage.setItem('mangaReadingHistory', JSON.stringify(history));
+            }
+        }
+
+        function isChapterRead(chapterNum) {
+            const history = getReadingHistory();
+            const mangaKey = `manga_${mangaId}`;
+            return history[mangaKey] && history[mangaKey].includes(chapterNum);
+        }
+
+        // Загрузка главы
+        function loadChapter(chapterNum) {
+            if (isLoading) return;
+            isLoading = true;
+
+            document.querySelector('.chapter-info').textContent = `tom 1 rozdział ${chapterNum}`;
+
+            const container = document.getElementById('staticImagesContainer');
+            container.style.opacity = '0';
+
+            setTimeout(() => {
+                container.innerHTML = '';
+
+                const imageUrls = chapterImages[chapterNum] || [];
+
+                if (imageUrls.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #fff;">
+                            <p>Rozdział ${chapterNum} nie ma jeszcze dodanych obrazów</p>
+                        </div>`;
+                    container.style.opacity = '1';
+                    isLoading = false;
+                    return;
+                }
+                
+                // Сохраняем изображения текущей главы и сбрасываем страницу
+                currentChapterImages = imageUrls;
+                totalPages = imageUrls.length;
+                currentPage = 1;
+                
+                // Показываем контролы страниц
+                document.getElementById('pageControls').style.display = 'block';
+                
+                // Загружаем первую страницу
+                loadPage(1);
+                
+                // Сохраняем главу в историю чтения
+                saveChapterAsRead(chapterNum);
+                isLoading = false;
+            }, 200);
+        }
+        
+        // Функция загрузки отдельной страницы
+        function loadPage(pageNum) {
+            if (pageNum < 1 || pageNum > totalPages) return;
+            
+            currentPage = pageNum;
+            const container = document.getElementById('staticImagesContainer');
+            
+            // Анимация перелистывания
+            container.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            container.style.transform = 'scale(0.95)';
+            container.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+                
+                const imageUrl = currentChapterImages[pageNum - 1];
+                
+                // Создаем контейнер для кликабельных зон
+                const clickContainer = document.createElement('div');
+                clickContainer.style.cssText = 'display: flex; width: 700px; cursor: pointer; position: relative;';
+                clickContainer.onclick = handleImageClick;
+                
+                // Левая зона (назад)
+                const leftZone = document.createElement('div');
+                leftZone.style.cssText = 'width: 50%; height: 100%; position: absolute; left: 0; top: 0;';
+                
+                // Правая зона (вперед)
+                const rightZone = document.createElement('div');
+                rightZone.style.cssText = 'width: 50%; height: 100%; position: absolute; right: 0; top: 0;';
+                
+                // Изображение
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.style.cssText = 'max-width: 100%; width: 700px; display: block; background: #1a1a1a;';
+                img.alt = `Strona ${pageNum}`;
+                
+                img.onload = function() {
+                    container.appendChild(clickContainer);
+                    clickContainer.appendChild(leftZone);
+                    clickContainer.appendChild(rightZone);
+                    clickContainer.appendChild(img);
+                    
+                    // Анимация появления
+                    container.style.transform = 'scale(1)';
+                    container.style.opacity = '1';
+                };
+                
+                img.onerror = function() {
+                    console.error(`Nie udało się załadować: ${imageUrl}`);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.style.cssText = 'width: 700px; height: 1000px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; color: #666;';
+                    errorDiv.innerHTML = `<span>Błąd ładowania strony ${pageNum}</span>`;
+                    container.appendChild(errorDiv);
+                    container.style.transform = 'scale(1)';
+                    container.style.opacity = '1';
+                };
+                
+                // Обновляем информацию о странице
+                document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages}`;
+            }, 150);
+        }
+        
+        // Обработка клика на изображение
+        function handleImageClick(e) {
+            const rect = e.target.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const centerX = rect.width / 2;
+            
+            if (clickX > centerX) {
+                nextPage();
+            } else {
+                previousPage();
+            }
+        }
+        
+        // Навигация по страницам
+        function nextPage() {
+            if (currentPage < totalPages && !isLoading) {
+                loadPage(currentPage + 1);
+            } else if (currentPage === totalPages && !isLoading) {
+                // Если это последняя страница, переходим к следующей главе
+                nextChapter();
+            }
+        }
+        
+        function previousPage() {
+            if (currentPage > 1 && !isLoading) {
+                loadPage(currentPage - 1);
+            } else if (currentPage === 1 && !isLoading) {
+                // Если это первая страница, переходим к предыдущей главе
+                previousChapter();
+            }
+        }
+
+        // Навигация
+        function previousChapter() {
+            const currentTime = Date.now();
+            if (currentTime - lastClickTime < CLICK_DELAY) return;
+            lastClickTime = currentTime;
+
+            if (currentChapter > 1 && !isLoading) {
+                currentChapter--;
+                loadChapter(currentChapter);
+                updateURL();
+                updateCurrentChapterHighlight();
+            }
+        }
+
+        function nextChapter() {
+            const currentTime = Date.now();
+            if (currentTime - lastClickTime < CLICK_DELAY) return;
+            lastClickTime = currentTime;
+
+            if (currentChapter < totalChapters && !isLoading) {
+                currentChapter++;
+                loadChapter(currentChapter);
+                updateURL();
+                updateCurrentChapterHighlight();
+            }
+        }
+
+        function updateURL() {
+            const url = new URL(window.location);
+            url.searchParams.set('chapter', currentChapter);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Список глав
+        function toggleChapterList() {
+            const dropdown = document.getElementById('chapterListDropdown');
+            const isVisible = dropdown.classList.contains('show');
+
+            if (isVisible) {
+                dropdown.classList.remove('show');
+            } else {
+                if (dropdown.children.length === 0) {
+                    generateChapterList();
+                }
+                dropdown.classList.add('show');
+            }
+        }
+
+        function generateChapterList() {
+            const dropdown = document.getElementById('chapterListDropdown');
+
+            for (let i = 1; i <= totalChapters; i++) {
+                const chapterItem = document.createElement('div');
+                chapterItem.className = 'chapter-list-item';
+
+                if (isChapterRead(i)) {
+                    chapterItem.classList.add('read');
+                }
+
+                chapterItem.textContent = `Tom 1 Rozdział ${i}`;
+                chapterItem.onclick = function() {
+                    const currentTime = Date.now();
+                    if (currentTime - lastClickTime < CLICK_DELAY) return;
+                    lastClickTime = currentTime;
+
+                    if (!isLoading) {
+                        currentChapter = i;
+                        loadChapter(currentChapter);
+                        updateURL();
+                        dropdown.classList.remove('show');
+
+                        document.querySelectorAll('.chapter-list-item').forEach(item => {
+                            item.classList.remove('current');
+                        });
+                        this.classList.add('current');
+                    }
+                };
+                dropdown.appendChild(chapterItem);
+            }
+
+            updateCurrentChapterHighlight();
+        }
+
+        function updateCurrentChapterHighlight() {
+            const items = document.querySelectorAll('.chapter-list-item');
+            items.forEach((item, index) => {
+                if (index + 1 === currentChapter) {
+                    item.classList.add('current');
+                } else {
+                    item.classList.remove('current');
+                }
+            });
+        }
+        // Обработчики событий
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('chapterListDropdown');
+            const chapterInfo = document.querySelector('.chapter-info');
+
+            if (!dropdown.contains(e.target) && e.target !== chapterInfo) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Инициализация
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chapterParam = urlParams.get('chapter');
+
+            if (chapterParam) {
+                currentChapter = parseInt(chapterParam);
+                if (currentChapter < 1) currentChapter = 1;
+                if (currentChapter > totalChapters) currentChapter = totalChapters;
+            }
+
+            loadChapter(currentChapter);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    previousPage();
+                } else if (e.key === 'ArrowRight') {
+                    nextPage();
+                }
+            });
+        };
+    </script>
+</body>
+</html>

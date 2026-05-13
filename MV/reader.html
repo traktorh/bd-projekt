@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Czytnik mangi - MANGAVERSE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reader.css">
+</head>
+<body>
+    <header class="reader-header">
+        <div class="reader-nav">
+            <div class="reader-nav-left">
+                 <a class="logo" href="index.html">MANGA<span>VERSE</span></a>
+                <span class="manga-title-reader" id="mangaTitleReader">angel-next-door</span>
+            </div>
+            <div class="reader-nav-center">
+                <button class="chapter-nav-btn" onclick="previousChapter()">←</button>
+                <span class="chapter-info" onclick="toggleChapterList()">tom 1 rozdział 1</span>
+                <button class="chapter-nav-btn" onclick="nextChapter()">→</button>
+                <div id="chapterListDropdown" class="chapter-list-dropdown">
+                    <!-- Chapter list will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="reader-main" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 80px);">
+        <!-- Kontener dla dynamicznej ładowania obrazów rozdziałów -->
+        <div id="staticImagesContainer" style="margin: 0 auto; max-width: 800px; background: #0a0a0a; position: relative;">
+            <!-- Obrazy będą ładowane dynamicznie -->
+        </div>
+        
+        <!-- Page navigation controls -->
+        <div id="pageControls" style="display: none; text-align: center; padding: 20px; color: #fff; margin-top: 20px;">
+            <button onclick="previousPage()" style="padding: 10px 20px; margin: 0 10px; background: #4a9eff; color: white; border: none; border-radius: 4px; cursor: pointer;">← Previous Page</button>
+            <span id="pageInfo" style="margin: 0 20px;">Page 1 / 1</span>
+            <button onclick="nextPage()" style="padding: 10px 20px; margin: 0 10px; background: #4a9eff; color: white; border: none; border-radius: 4px; cursor: pointer;">Next Page →</button>
+        </div>
+    </main>
+
+    <!-- Overlay dla animacji przejścia między rozdziałami (nie używany) -->
+    <!-- <div id="chapterTransitionOverlay" class="chapter-transition-overlay">
+        <div class="transition-content">
+           
+           
+        </div>
+    </div> -->
+
+  
+
+   
+    <script>
+        // Конфигурация всех манг
+        const mangaConfig = {
+            'angel-next-door': {
+                id: 1,
+                title: 'angel-next-door',
+                totalChapters: 39,
+                chapters: {}
+            },
+            'high-school-dxd': {
+                id: 2,
+                title: 'high-school-dxd',
+                totalChapters: 76,
+                chapters: {
+                    1: [
+                        'https://s25.mbcdnsaz.org/res/manga/high-school-dxd/vol-1-chapter-1/1.jpg',
+                        'https://s25.mbcdnsaz.org/res/manga/high-school-dxd/vol-1-chapter-1/2.jpg',
+                        'https://s25.mbcdnsaz.org/res/manga/high-school-dxd/vol-1-chapter-1/3.jpg'
+                    ]
+                }
+            },
+            'chainsaw-man': {
+                id: 3,
+                title: 'chainsaw-man',
+                totalChapters: 98,
+                chapters: {}
+            }
+        };
+
+        
+        
+        // Настройки
+        let currentChapter = 1;
+        let totalChapters = 39;
+        let mangaId = 1;
+        let currentManga = 'angel-next-door';
+        
+        // Ссылки на изображения для каждой главы
+        // Просто вставляйте URL картинок в массив для каждой главы
+        const chapterImages = {
+           1: Array.from({length: 14}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-1/${i + 1}.webp`),
+            2: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-2/${i + 1}.webp`),
+            3: Array.from({length: 13}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-3/${i + 1}.webp`),
+        4: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-4/${i + 1}.webp`),
+        5: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-5/${i + 1}.webp`),
+          6: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-6/${i + 1}.webp`),  
+           7: Array.from({length: 13}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-7/${i + 1}.webp`),
+             8: Array.from({length: 15}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-8/${i + 1}.webp`),
+             9: Array.from({length: 13}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-9/${i + 1}.webp`),
+             10: Array.from({length: 13}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-10/${i + 1}.webp`),
+             11: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-11/${i + 1}.webp`),
+             12: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-12/${i + 1}.webp`),
+             13: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-13/${i + 1}.webp`),
+             14: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-14/${i + 1}.webp`),
+             15: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-15/${i + 1}.webp`),
+                16: Array.from({length: 13}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-16/${i + 1}.webp`),
+                17: Array.from({length: 13}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-17/${i + 1}.webp`),
+                18: Array.from({length: 15}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-18/${i + 1}.webp`),
+                    19: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-19/${i + 1}.webp`),
+                    20: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-20/${i + 1}.webp`),
+                    21: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-21/${i + 1}.webp`),
+                    22: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-22/${i + 1}.webp`),
+                    23: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-23/${i + 1}.webp`),
+                    24: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-24/${i + 1}.webp`),
+                    25: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-25/${i + 1}.webp`),
+                    26: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-26/${i + 1}.webp`),
+                    27: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-27/${i + 1}.webp`),
+                    28: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-28/${i + 1}.webp`),
+                    29: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-29/${i + 1}.webp`),
+                    30: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-30/${i + 1}.webp`),
+                    31: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-31/${i + 1}.webp`),
+                    32: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-32/${i + 1}.webp`),
+                    33: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-33/${i + 1}.webp`),
+                    34: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-34/${i + 1}.webp`),
+                    35: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-35/${i + 1}.webp`),
+                    36: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-36/${i + 1}.webp`),
+                    37: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-37/${i + 1}.webp`),
+                    38: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-38/${i + 1}.webp`),
+                    39: Array.from({length: 11}, (_, i) => `https://pic.readkakegurui.com/file/sancdn/the-angel-next-door-spoils-me-rotten-after-the-rain/chapter-39/${i + 1}.webp`),
+         
+            
+        };  
+        
+        let isLoading = false;
+        let lastClickTime = 0;
+        const CLICK_DELAY = 100; // Уменьшил задержку между кликами
+        
+        // Page navigation variables
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentChapterImages = [];
+
+        // Функции для работы с историей чтения
+        function getReadingHistory() {
+            const history = localStorage.getItem('mangaReadingHistory');
+            return history ? JSON.parse(history) : {};
+        }
+
+        function saveChapterAsRead(chapterNum) {
+            const history = getReadingHistory();
+            const mangaKey = `manga_${mangaId}`;
+            
+            if (!history[mangaKey]) {
+                history[mangaKey] = [];
+            }
+            
+            if (!history[mangaKey].includes(chapterNum)) {
+                history[mangaKey].push(chapterNum);
+                history[mangaKey].sort((a, b) => a - b); // Сортируем по порядку
+                localStorage.setItem('mangaReadingHistory', JSON.stringify(history));
+            }
+        }
+
+        function isChapterRead(chapterNum) {
+            const history = getReadingHistory();
+            const mangaKey = `manga_${mangaId}`;
+            return history[mangaKey] && history[mangaKey].includes(chapterNum);
+        }
+
+        // Функция загрузки главы с URL изображениями
+        function loadChapter(chapterNum) {
+            if (isLoading) return;
+            isLoading = true;
+            
+            // Обновляем информацию о главе в header
+            document.querySelector('.chapter-info').textContent = `tom 1 rozdział ${chapterNum}`;
+            
+            const container = document.getElementById('staticImagesContainer');
+            
+            // Простая анимация исчезновения
+            container.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Очищаем контейнер
+                container.innerHTML = '';
+                
+                // Получаем массив URL для текущей главы
+                const imageUrls = chapterImages[chapterNum] || [];
+                
+                // Если нет ссылок для этой главы
+                if (imageUrls.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #fff;">
+                            <p>Rozdział ${chapterNum} nie ma jeszcze dodanych obrazów</p>
+                            <p style="font-size: 14px; color: #888; margin-top: 10px;">
+                                Dodaj linki do zdjęć w kodzie (chapterImages[${chapterNum}])
+                            </p>
+                        </div>`;
+                    container.style.opacity = '1';
+                    isLoading = false;
+                    return;
+                }
+                
+                // Сохраняем изображения текущей главы и сбрасываем страницу
+                currentChapterImages = imageUrls;
+                totalPages = imageUrls.length;
+                currentPage = 1;
+                
+                // Показываем контролы страниц
+                document.getElementById('pageControls').style.display = 'block';
+                
+                // Загружаем первую страницу
+                loadPage(1);
+                
+                // Сохраняем главу в историю чтения
+                saveChapterAsRead(chapterNum);
+                isLoading = false;
+            }, 200); // Короткая задержка для анимации
+        }
+        
+        // Функция загрузки отдельной страницы
+        function loadPage(pageNum) {
+            if (pageNum < 1 || pageNum > totalPages) return;
+            
+            currentPage = pageNum;
+            const container = document.getElementById('staticImagesContainer');
+            
+            // Анимация перелистывания
+            container.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            container.style.transform = 'scale(0.95)';
+            container.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+                
+                const imageUrl = currentChapterImages[pageNum - 1];
+                
+                // Создаем контейнер для кликабельных зон
+                const clickContainer = document.createElement('div');
+                clickContainer.style.cssText = 'display: flex; width: 700px; cursor: pointer; position: relative;';
+                clickContainer.onclick = handleImageClick;
+                
+                // Левая зона (назад)
+                const leftZone = document.createElement('div');
+                leftZone.style.cssText = 'width: 50%; height: 100%; position: absolute; left: 0; top: 0;';
+                
+                // Правая зона (вперед)
+                const rightZone = document.createElement('div');
+                rightZone.style.cssText = 'width: 50%; height: 100%; position: absolute; right: 0; top: 0;';
+                
+                // Изображение
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.style.cssText = 'max-width: 100%; width: 700px; display: block; background: #1a1a1a;';
+                img.alt = `Strona ${pageNum}`;
+                
+                img.onload = function() {
+                    container.appendChild(clickContainer);
+                    clickContainer.appendChild(leftZone);
+                    clickContainer.appendChild(rightZone);
+                    clickContainer.appendChild(img);
+                    
+                    // Анимация появления
+                    container.style.transform = 'scale(1)';
+                    container.style.opacity = '1';
+                };
+                
+                img.onerror = function() {
+                    console.error(`Nie udało się załadować: ${imageUrl}`);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.style.cssText = 'width: 700px; height: 1000px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; color: #666;';
+                    errorDiv.innerHTML = `<span>Błąd ładowania strony ${pageNum}</span>`;
+                    container.appendChild(errorDiv);
+                    container.style.transform = 'scale(1)';
+                    container.style.opacity = '1';
+                };
+                
+                // Обновляем информацию о странице
+                document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages}`;
+            }, 150);
+        }
+        
+        // Обработка клика на изображение
+        function handleImageClick(e) {
+            const rect = e.target.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const centerX = rect.width / 2;
+            
+            if (clickX > centerX) {
+                nextPage();
+            } else {
+                previousPage();
+            }
+        }
+        
+        // Навигация по страницам
+        function nextPage() {
+            if (currentPage < totalPages && !isLoading) {
+                loadPage(currentPage + 1);
+            } else if (currentPage === totalPages && !isLoading) {
+                // Если это последняя страница, переходим к следующей главе
+                nextChapter();
+            }
+        }
+        
+        function previousPage() {
+            if (currentPage > 1 && !isLoading) {
+                loadPage(currentPage - 1);
+            } else if (currentPage === 1 && !isLoading) {
+                // Если это первая страница, переходим к предыдущей главе
+                previousChapter();
+            }
+        }
+
+        // Функции навигации между главами
+        function previousChapter() {
+            const currentTime = Date.now();
+            if (currentTime - lastClickTime < CLICK_DELAY) return;
+            lastClickTime = currentTime;
+            
+            if (currentChapter > 1 && !isLoading) {
+                currentChapter--;
+                loadChapter(currentChapter);
+                updateURL();
+                updateCurrentChapterHighlight();
+            }
+        }
+
+        function nextChapter() {
+            const currentTime = Date.now();
+            if (currentTime - lastClickTime < CLICK_DELAY) return;
+            lastClickTime = currentTime;
+            
+            if (currentChapter < totalChapters && !isLoading) {
+                currentChapter++;
+                loadChapter(currentChapter);
+                updateURL();
+                updateCurrentChapterHighlight();
+            }
+        }
+        
+            // Обновление URL параметров
+        function updateURL() {
+            const url = new URL(window.location);
+            url.searchParams.set('chapter', currentChapter);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Функция переключения выпадающего списка глав
+        function toggleChapterList() {
+            const dropdown = document.getElementById('chapterListDropdown');
+            const isVisible = dropdown.classList.contains('show');
+            
+            if (isVisible) {
+                dropdown.classList.remove('show');
+            } else {
+                // Генерируем список только если он пустой
+                if (dropdown.children.length === 0) {
+                    generateChapterList();
+                }
+                dropdown.classList.add('show');
+            }
+        }
+        
+        // Функция генерации списка глав
+        function generateChapterList() {
+            const dropdown = document.getElementById('chapterListDropdown');
+            
+            for (let i = 1; i <= totalChapters; i++) {
+                const chapterItem = document.createElement('div');
+                chapterItem.className = 'chapter-list-item';
+                
+                // Проверяем, прочитана ли глава
+                if (isChapterRead(i)) {
+                    chapterItem.classList.add('read');
+                }
+                
+                chapterItem.textContent = `Tom 1 Rozdział ${i}`;
+                chapterItem.onclick = function() {
+                    const currentTime = Date.now();
+                    if (currentTime - lastClickTime < CLICK_DELAY) return;
+                    lastClickTime = currentTime;
+                    
+                    if (!isLoading) {
+                        currentChapter = i;
+                        loadChapter(currentChapter);
+                        updateURL();
+                        dropdown.classList.remove('show');
+                        
+                        // Aktualizujemy podświetlenie bieżącego rozdziału
+                        document.querySelectorAll('.chapter-list-item').forEach(item => {
+                            item.classList.remove('current');
+                        });
+                        this.classList.add('current');
+                    }
+                };
+                dropdown.appendChild(chapterItem);
+            }
+            
+            // Aktualizujemy podświetlenie bieżącego rozdziału
+            updateCurrentChapterHighlight();
+        }
+        
+        // Funkcja aktualizowania podświetlenia bieżącego rozdziału
+        function updateCurrentChapterHighlight() {
+            const items = document.querySelectorAll('.chapter-list-item');
+            items.forEach((item, index) => {
+                if (index + 1 === currentChapter) {
+                    item.classList.add('current');
+                } else {
+                    item.classList.remove('current');
+                }
+            });
+        }
+        
+        // Zamknięcie listy rozwijanej przy kliknięciu poza nią
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('chapterListDropdown');
+            const chapterInfo = document.querySelector('.chapter-info');
+            
+            if (!dropdown.contains(e.target) && e.target !== chapterInfo) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Inicjacja przy załadowaniu strony
+        window.onload = function() {
+            // Otrzymujemy parametr mangi z URL
+            const urlParams = new URLSearchParams(window.location.search);
+            let mangaParam = urlParams.get('manga') || 'angel-next-door';
+            
+            // Sprawdzamy czy manga istnieje w konfiguracji
+            if (!mangaConfig[mangaParam]) {
+                mangaParam = 'angel-next-door';
+            }
+            
+            // Ładujemy konfigurację wybranej mangi
+            currentManga = mangaParam;
+            const config = mangaConfig[currentManga];
+            
+            totalChapters = config.totalChapters;
+            mangaId = config.id;
+            
+            // Ustawiamy tytuł mangi w nagłówku
+            document.getElementById('mangaTitleReader').textContent = config.title;
+            
+            // Ustawiamy chapterImages na podstawie konfiguracji
+            if (currentManga === 'angel-next-door') {
+                // Angel Next Door ma osadzone adresy URL, pozostałe używają placeholderów
+                // Nie zmieniamy chapterImages dla Angel Next Door
+            } else {
+                // Dla innych mang użyj placeholderów
+                for (let i = 1; i <= totalChapters; i++) {
+                    if (!chapterImages[i]) {
+                        chapterImages[i] = config.chapters[i];
+                    }
+                }
+            }
+            
+            // Otrzymujemy numer rozdziału z URL parametrów
+            const chapterParam = urlParams.get('chapter');
+            
+            if (chapterParam) {
+                currentChapter = parseInt(chapterParam);
+                // Sprawdzamy czy numer rozdziału jest w dopuszczalnym zakresie
+                if (currentChapter < 1) currentChapter = 1;
+                if (currentChapter > totalChapters) currentChapter = totalChapters;
+            }
+            
+            // Ładujemy pierwszy lub wskazany rozdział
+            loadChapter(currentChapter);
+            
+            // Dodajemy obsługę nawigacji klawiatury
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    previousPage();
+                } else if (e.key === 'ArrowRight') {
+                    nextPage();
+                }
+            });
+        };
+    </script>
+</body>
+</html>

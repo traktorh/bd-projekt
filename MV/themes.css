@@ -1,0 +1,338 @@
+/* MangaVerse Color System - Dark Theme Only */
+
+:root {
+    /* Dark Theme Colors */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #404040;
+    --bg-quaternary: #555555;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-tertiary: #999999;
+    --text-inverse: #1a1a1a;
+    
+    --border-primary: #404040;
+    --border-secondary: #555555;
+    --border-tertiary: #666666;
+    
+    --accent-primary: #8b5cf6;
+    --accent-primary-hover: #7c3aed;
+    --accent-secondary: #a78bfa;
+    --accent-tertiary: #c4b5fd;
+    
+    --success: #10b981;
+    --success-hover: #059669;
+    --error: #ef4444;
+    --error-hover: #dc2626;
+    --warning: #f59e0b;
+    --warning-hover: #d97706;
+    
+    --shadow-primary: rgba(0, 0, 0, 0.3);
+    --shadow-secondary: rgba(0, 0, 0, 0.2);
+    --shadow-tertiary: rgba(0, 0, 0, 0.1);
+    
+    --navbar-bg: #2d2d2d;
+    --navbar-border: #404040;
+    --footer-bg: #0d0d0d;
+    --footer-border: #2d2d2d;
+    
+    --card-bg: #2d2d2d;
+    --card-border: #404040;
+    --card-hover: #404040;
+    
+    --input-bg: #404040;
+    --input-border: #555555;
+    --input-focus: #8b5cf6;
+    --input-text: #ffffff;
+    
+    --button-primary: #8b5cf6;
+    --button-primary-hover: #7c3aed;
+    --button-secondary: #404040;
+    --button-secondary-hover: #555555;
+    
+    --rating-star: #fbbf24;
+    --badge-new: #10b981;
+    --badge-popular: #f59e0b;
+}
+
+/* Apply color variables to existing styles */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.navbar {
+    background: var(--navbar-bg);
+    border-bottom: 1px solid var(--navbar-border);
+}
+
+.logo {
+    color: var(--text-primary);
+}
+
+.logo span {
+    color: var(--accent-primary);
+}
+
+.logo:hover {
+    color: var(--accent-primary);
+}
+
+.search-box input {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+}
+
+.search-box input:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.search-suggestions {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+}
+
+.suggestion-item {
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.suggestion-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.nav-link {
+    color: var(--text-primary);
+}
+
+.nav-link:hover {
+    color: var(--accent-primary);
+}
+
+.account-btn {
+    background: var(--accent-primary);
+    color: var(--text-inverse);
+}
+
+.account-btn:hover {
+    background: var(--accent-primary-hover);
+}
+
+.dropdown-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+}
+
+.dropdown-item {
+    color: var(--text-secondary);
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.divider {
+    border-top: 1px solid var(--border-primary);
+}
+
+.auth-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+}
+
+.auth-tab {
+    color: var(--text-secondary);
+    border-bottom: 2px solid transparent;
+}
+
+.auth-tab.active {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+}
+
+.auth-form label {
+    color: var(--text-secondary);
+}
+
+.auth-form input {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+}
+
+.auth-form input:focus {
+    border-color: var(--input-focus);
+}
+
+.auth-submit-btn {
+    background: var(--button-primary);
+    color: var(--text-inverse);
+}
+
+.auth-submit-btn:hover {
+    background: var(--button-primary-hover);
+}
+
+.auth-message.success {
+    background: var(--success);
+    color: var(--text-inverse);
+}
+
+.auth-message.error {
+    background: var(--error);
+    color: var(--text-inverse);
+}
+
+footer {
+    background: var(--footer-bg);
+    border-top: 1px solid var(--footer-border);
+    color: var(--text-tertiary);
+}
+
+/* Card styles */
+.manga-card-simple {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+}
+
+.manga-card-simple:hover {
+    background: var(--card-hover);
+}
+
+/* Rating stars */
+.stars-simple {
+    color: var(--rating-star);
+}
+
+/* Badges */
+.new-badge {
+    background: var(--badge-new);
+    color: var(--text-inverse);
+}
+
+/* Genre tags */
+.manga-tag {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+.manga-tag.clickable:hover {
+    background: var(--accent-primary);
+    color: var(--text-inverse);
+}
+
+/* Модальное окно авторизации */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    margin: 3% auto;
+    padding: 40px;
+    border: 1px solid var(--border-primary);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+    min-height: 500px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.close-btn:hover {
+    color: var(--text-primary);
+}
+
+.modal-content h2 {
+    margin: 0 0 20px 0;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    background: var(--input-bg);
+    color: var(--input-text);
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent-primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: var(--accent-primary-hover);
+    transform: translateY(-1px);
+}
+
+/* Ссылка переключения авторизации */
+.auth-toggle {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-primary);
+}
+
+.auth-toggle a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.auth-toggle a:hover {
+    color: var(--accent-primary-hover);
+    text-decoration: underline;
+}

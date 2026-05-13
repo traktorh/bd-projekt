@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Czytnik mangi - MANGAVERSE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reader.css">
+</head>
+<body>
+    <header class="reader-header">
+        <div class="reader-nav">
+            <div class="reader-nav-left">
+                 <a class="logo" href="index.html">MANGA<span>VERSE</span></a>
+                <span class="manga-title-reader">chainsaw-man</span>
+            </div>
+            <div class="reader-nav-center">
+                <button class="chapter-nav-btn" onclick="previousChapter()">←</button>
+                <span class="chapter-info" onclick="toggleChapterList()">tom 1 rozdział 1</span>
+                <button class="chapter-nav-btn" onclick="nextChapter()">→</button>
+                <div id="chapterListDropdown" class="chapter-list-dropdown">
+                    <!-- Chapter list will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="reader-main">
+        <!-- Kontener dla dynamicznej ładowania obrazów rozdziałów -->
+        <div id="staticImagesContainer" style="margin: 0 auto; max-width: 800px; background: #0a0a0a;">
+            <!-- Obrazy będą ładowane dynamicznie -->
+        </div>
+    </main>
+
+    <script>
+        // Настройки
+        let currentChapter = 1;
+        let totalChapters = 98; // Chainsaw Man
+        let mangaId = 3;
+        
+        // Ссылки на изображения для каждой главы
+        const chapterImages = {
+            1: Array.from({length: 26}, (_, i) => `blob:https://mangadex.org/cb7a0efd-462d-43ff-841b-892304eb4867`),
+        };
+        
+        // Генерируем placeholder изображenia dla wszystkich 98 glav
+        for (let i = 1; i <= 98; i++) {
+            chapterImages[i] = [];
+            // Każdy rozdział ma 5-15 stron (obrazów)
+            const pagesCount = Math.floor(Math.random() * 11) + 5; // 5-15 stron
+            for (let p = 1; p <= pagesCount; p++) {
+                chapterImages[i].push(`https://s10.mbcdnsak.org/res/manga/chainsaw-man/chapter-1-a-dog-and-a-chainsaw/${i + 1}.jpg`);
+            }
+        }
+        
+        let isLoading = false;
+        let lastClickTime = 0;
+        const CLICK_DELAY = 100;
+
+        // Функции для работы с историей чтения
+        function getReadingHistory() {
+            const history = localStorage.getItem('mangaReadingHistory');
+            return history ? JSON.parse(history) : {};
+        }
+
+        function saveChapterAsRead(chapterNum) {
+            const history = getReadingHistory();
+            const mangaKey = `manga_${mangaId}`;
+            
+            if (!history[mangaKey]) {
+                history[mangaKey] = [];
+            }
+            
+            if (!history[mangaKey].includes(chapterNum)) {
+                history[mangaKey].push(chapterNum);
+                history[mangaKey].sort((a, b) => a - b);
+                localStorage.setItem('mangaReadingHistory', JSON.stringify(history));
+            }
+        }
+
+        function isChapterRead(chapterNum) {
+            const history = getReadingHistory();
+            const mangaKey = `manga_${mangaId}`;
+            return history[mangaKey] && history[mangaKey].includes(chapterNum);
+        }
+
+        // Функция загрузки главы с URL изображениями
+        function loadChapter(chapterNum) {
+            if (isLoading) return;
+            isLoading = true;
+            
+            document.querySelector('.chapter-info').textContent = `tom 1 rozdział ${chapterNum}`;
+            
+            const container = document.getElementById('staticImagesContainer');
+            
+            container.style.opacity = '0';
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+                
+                const imageUrls = chapterImages[chapterNum] || [];
+                
+                if (imageUrls.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #fff;">
+                            <p>Rozdział ${chapterNum} nie ma jeszcze dodanych obrazów</p>
+                            <p style="font-size: 14px; color: #888; margin-top: 10px;">
+                                Dodaj linki do zdjęć w kodzie (chapterImages[${chapterNum}])
+                            </p>
+                        </div>`;
+                    container.style.opacity = '1';
+                    isLoading = false;
+                    return;
+                }
+                
+                const imagesContainer = document.createElement('div');
+                imagesContainer.style.display = 'flex';
+                imagesContainer.style.flexDirection = 'column';
+                imagesContainer.style.alignItems = 'center';
+                
+                let loadedImages = 0;
+                let hasAnyImage = false;
+                
+                imageUrls.forEach((imageUrl, index) => {
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.style.cssText = 'max-width: 100%; width: 700px; display: block; margin-bottom: 10px; background: #1a1a1a;';
+                    img.alt = `Strona ${index + 1}`;
+                    
+                    img.onload = function() {
+                        loadedImages++;
+                        hasAnyImage = true;
+                        if (loadedImages === 1) {
+                            container.appendChild(imagesContainer);
+                            container.style.opacity = '1';
+                            saveChapterAsRead(chapterNum);
+                            isLoading = false;
+                        }
+                    };
+                    
+                    img.onerror = function() {
+                        loadedImages++;
+                        console.error(`Nie udało się załadować: ${imageUrl}`);
+                        const errorDiv = document.createElement('div');
+                        errorDiv.style.cssText = 'width: 700px; height: 1000px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 10px;';
+                        errorDiv.innerHTML = `<span>Błąd ładowania strony ${index + 1}</span>`;
+                        imagesContainer.appendChild(errorDiv);
+                        
+                        if (loadedImages === 1 && !hasAnyImage) {
+                            container.appendChild(imagesContainer);
+                            container.style.opacity = '1';
+                            isLoading = false;
+                        }
+                    };
+                    
+                    imagesContainer.appendChild(img);
+                });
+            }, 200);
+        }
+
+        // Функции навигации между главами
+        function previousChapter() {
+            const currentTime = Date.now();
+            if (currentTime - lastClickTime < CLICK_DELAY) return;
+            lastClickTime = currentTime;
+            
+            if (currentChapter > 1 && !isLoading) {
+                currentChapter--;
+                loadChapter(currentChapter);
+                updateURL();
+                updateCurrentChapterHighlight();
+            }
+        }
+
+        function nextChapter() {
+            const currentTime = Date.now();
+            if (currentTime - lastClickTime < CLICK_DELAY) return;
+            lastClickTime = currentTime;
+            
+            if (currentChapter < totalChapters && !isLoading) {
+                currentChapter++;
+                loadChapter(currentChapter);
+                updateURL();
+                updateCurrentChapterHighlight();
+            }
+        }
+        
+        function updateURL() {
+            const url = new URL(window.location);
+            url.searchParams.set('chapter', currentChapter);
+            window.history.replaceState({}, '', url);
+        }
+
+        function toggleChapterList() {
+            const dropdown = document.getElementById('chapterListDropdown');
+            const isVisible = dropdown.classList.contains('show');
+            
+            if (isVisible) {
+                dropdown.classList.remove('show');
+            } else {
+                if (dropdown.children.length === 0) {
+                    generateChapterList();
+                }
+                dropdown.classList.add('show');
+            }
+        }
+        
+        function generateChapterList() {
+            const dropdown = document.getElementById('chapterListDropdown');
+            
+            for (let i = 1; i <= totalChapters; i++) {
+                const chapterItem = document.createElement('div');
+                chapterItem.className = 'chapter-list-item';
+                
+                if (isChapterRead(i)) {
+                    chapterItem.classList.add('read');
+                }
+                
+                chapterItem.textContent = `Tom 1 Rozdział ${i}`;
+                chapterItem.onclick = function() {
+                    const currentTime = Date.now();
+                    if (currentTime - lastClickTime < CLICK_DELAY) return;
+                    lastClickTime = currentTime;
+                    
+                    if (!isLoading) {
+                        currentChapter = i;
+                        loadChapter(currentChapter);
+                        updateURL();
+                        dropdown.classList.remove('show');
+                        
+                        document.querySelectorAll('.chapter-list-item').forEach(item => {
+                            item.classList.remove('current');
+                        });
+                        this.classList.add('current');
+                    }
+                };
+                dropdown.appendChild(chapterItem);
+            }
+            
+            updateCurrentChapterHighlight();
+        }
+        
+        function updateCurrentChapterHighlight() {
+            const items = document.querySelectorAll('.chapter-list-item');
+            items.forEach((item, index) => {
+                if (index + 1 === currentChapter) {
+                    item.classList.add('current');
+                } else {
+                    item.classList.remove('current');
+                }
+            });
+        }
+        
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('chapterListDropdown');
+            const chapterInfo = document.querySelector('.chapter-info');
+            
+            if (!dropdown.contains(e.target) && e.target !== chapterInfo) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chapterParam = urlParams.get('chapter');
+            
+            if (chapterParam) {
+                currentChapter = parseInt(chapterParam);
+                if (currentChapter < 1) currentChapter = 1;
+                if (currentChapter > totalChapters) currentChapter = totalChapters;
+            }
+            
+            loadChapter(currentChapter);
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    previousChapter();
+                } else if (e.key === 'ArrowRight') {
+                    nextChapter();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
